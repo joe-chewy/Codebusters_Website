@@ -1,0 +1,174 @@
+/* ===== GENERAL STYLES ===== */
+/* The * selector applies to ALL elements */
+* {
+    box-sizing: border-box;  /* Makes padding included in width calculations */
+    margin: 0;
+    padding: 0;
+}
+
+/* Body styles - applies to the whole page */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ===== HEADER STYLES ===== */
+header {
+    background-color: #2c3e50;  /* Dark blue */
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+header h1 {
+    font-size: 2.5rem;  /* rem = relative to root font size */
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;  /* Slightly transparent */
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+    max-width: 800px;       /* Limits width on large screens */
+    margin: 0 auto;         /* Centers the content */
+    padding: 20px;
+}
+
+/* ===== CIPHER SECTIONS ===== */
+.cipher-section {
+    background-color: white;
+    border-radius: 10px;           /* Rounded corners */
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
+}
+
+.cipher-section h2 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #3498db;  /* Blue underline */
+    padding-bottom: 10px;
+}
+
+.description {
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+/* ===== INPUT GROUPS ===== */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;          /* Makes label take full width */
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+/* Textarea and input styling */
+textarea, input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;  /* Monospace for cipher text */
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;        /* Allow vertical resizing only */
+}
+
+input[type="number"] {
+    width: 100px;
+}
+
+/* Change border color when focused */
+textarea:focus, input:focus {
+    outline: none;           /* Remove default outline */
+    border-color: #3498db;   /* Blue border */
+}
+
+/* ===== BUTTONS ===== */
+.button-group {
+    margin: 20px 0;
+}
+
+button {
+    background-color: #3498db;  /* Blue */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;           /* Hand cursor on hover */
+    margin-right: 10px;
+    transition: background-color 0.3s;  /* Smooth color change */
+}
+
+/* Hover effect */
+button:hover {
+    background-color: #2980b9;  /* Darker blue */
+}
+
+/* Active (clicked) effect */
+button:active {
+    transform: scale(0.98);     /* Slightly smaller when clicked */
+}
+
+/* ===== OUTPUT AREA ===== */
+.output-group {
+    margin-top: 20px;
+}
+
+.output-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+.output-box {
+    background-color: #ecf0f1;
+    border: 2px solid #bdc3c7;
+    border-radius: 5px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    min-height: 50px;
+    word-wrap: break-word;     /* Wrap long text */
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    margin-top: 20px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+/* Adjustments for smaller screens (phones) */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .cipher-section {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codebusters Practice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <h1>Codebusters Practice</h1>
+        <p>Science Olympiad Division B</p>
+    </header>
+
+    <!-- Main content area -->
+    <main>
+        <!-- Caesar Cipher Section -->
+        <section class="cipher-section">
+            <h2>Caesar Cipher</h2>
+            <p class="description">
+                A Caesar cipher shifts each letter by a fixed number of positions in the alphabet.
+                For example, with a shift of 3: A becomes D, B becomes E, etc.
+            </p>
+
+            <!-- Input area -->
+            <div class="input-group">
+                <label for="caesar-input">Enter text:</label>
+                <textarea id="caesar-input" placeholder="TYPE YOUR MESSAGE HERE"></textarea>
+            </div>
+
+            <!-- Shift selector -->
+            <div class="input-group">
+                <label for="caesar-shift">Shift amount (1-25):</label>
+                <input type="number" id="caesar-shift" min="1" max="25" value="3">
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button id="caesar-encrypt">Encrypt</button>
+                <button id="caesar-decrypt">Decrypt</button>
+            </div>
+
+            <!-- Output area -->
+            <div class="output-group">
+                <label>Result:</label>
+                <div id="caesar-output" class="output-box">Your result will appear here</div>
+            </div>
+        </section>
+
+        <!-- Atbash Cipher Section -->
+        <section class="cipher-section">
+            <h2>Atbash Cipher</h2>
+            <p class="description">
+                Atbash reverses the alphabet: A becomes Z, B becomes Y, C becomes X, etc.
+                Encrypting and decrypting are the same operation!
+            </p>
+
+            <div class="input-group">
+                <label for="atbash-input">Enter text:</label>
+                <textarea id="atbash-input" placeholder="TYPE YOUR MESSAGE HERE"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button id="atbash-convert">Convert</button>
+            </div>
+
+            <div class="output-group">
+                <label>Result:</label>
+                <div id="atbash-output" class="output-box">Your result will appear here</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Good luck at competition!</p>
+    </footer>
+
+    <!-- JavaScript file - loaded at the end so HTML is ready -->
+    <script src="script.js"></script>
+</body>
+</html>
