@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codebusters Practice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <h1>Codebusters Practice</h1>
+        <p>Science Olympiad Division B</p>
+        <nav>
+            <a href="index.html" class="nav-link">Tools</a>
+            <a href="practice.html" class="nav-link active">Practice</a>
+        </nav>
+    </header>
+
+    <!-- Main content area -->
+    <main>
+        <!-- Timer Section -->
+        <section class="cipher-section">
+            <h2>Timer</h2>
+            <div class="timer-display" id="timer-display">05:00</div>
+            <div class="timer-controls">
+                <label for="timer-minutes">Minutes:</label>
+                <input type="number" id="timer-minutes" min="1" max="60" value="5">
+                <button id="timer-start">Start</button>
+                <button id="timer-pause">Pause</button>
+                <button id="timer-reset">Reset</button>
+            </div>
+        </section>
+
+        <!-- Practice Problem Section -->
+        <section class="cipher-section">
+            <h2>Practice Problem</h2>
+
+            <!-- Cipher type selection -->
+            <div class="input-group">
+                <label for="cipher-type">Choose cipher type:</label>
+                <select id="cipher-type" class="cipher-select">
+                    <option value="caesar">Caesar Cipher</option>
+                    <option value="atbash">Atbash Cipher</option>
+                </select>
+            </div>
+
+            <!-- Generate button -->
+            <div class="button-group">
+                <button id="generate-problem">Generate New Problem</button>
+            </div>
+
+            <!-- Problem display -->
+            <div class="output-group">
+                <label>Decrypt this ciphertext:</label>
+                <div id="problem-text" class="problem-box">Click "Generate New Problem" to start</div>
+                <p class="hint-text" id="problem-hint"></p>
+            </div>
+
+            <!-- Answer input -->
+            <div class="input-group">
+                <label for="answer-input">Your answer:</label>
+                <textarea id="answer-input" placeholder="TYPE YOUR ANSWER HERE"></textarea>
+            </div>
+
+            <!-- Check answer button -->
+            <div class="button-group">
+                <button id="check-answer">Check Answer</button>
+                <button id="show-answer">Show Answer</button>
+            </div>
+
+            <!-- Result display -->
+            <div id="result-display"></div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Good luck at competition!</p>
+    </footer>
+
+    <!-- JavaScript file -->
+    <script src="practice.js"></script>
+</body>
+</html>

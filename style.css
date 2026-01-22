@@ -32,6 +32,29 @@ header p {
     opacity: 0.9;  /* Slightly transparent */
 }
 
+/* ===== NAVIGATION ===== */
+nav {
+    margin-top: 20px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 25px;
+    margin: 0 5px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link.active {
+    background-color: #3498db;
+}
+
 /* ===== MAIN CONTENT ===== */
 main {
     max-width: 800px;       /* Limits width on large screens */
@@ -146,6 +169,80 @@ button:active {
     font-size: 1.1rem;
     min-height: 50px;
     word-wrap: break-word;     /* Wrap long text */
+}
+
+/* ===== PRACTICE PAGE ===== */
+.timer-display {
+    font-size: 3rem;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 20px;
+    background-color: #2c3e50;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.timer-display.warning {
+    background-color: #e74c3c;
+}
+
+.cipher-select {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.problem-box {
+    background-color: #fff9e6;
+    border: 2px solid #f1c40f;
+    border-radius: 5px;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    min-height: 80px;
+    margin-bottom: 20px;
+    word-wrap: break-word;
+    letter-spacing: 2px;
+}
+
+.hint-text {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.result-correct {
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.result-incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.timer-controls input {
+    width: 80px;
 }
 
 /* ===== FOOTER ===== */
