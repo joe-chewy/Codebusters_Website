@@ -105,6 +105,28 @@ function atbashCipher(text) {
     return result;
 }
 
+function affineEncrypt(text, a, b) {
+    let result = '';
+
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+
+        if (char >= 'A' && char <= 'Z') {
+            let code = char.charCodeAt(0) - 65;
+            let index = (a * code + b) % 26;
+            result += String.fromCharCode(index + 65);
+        } else if (char >= 'a' && char <= 'z') {
+            let code = char.charCodeAt(0) - 97;
+            let index = (a * code + b) % 26;
+            result += String.fromCharCode(index + 97);
+        } else {
+            result += char;
+        }
+    }
+
+    return result;
+}
+
 
 // ===== PRACTICE PROBLEMS =====
 
@@ -160,6 +182,14 @@ function generateProblem() {
         ciphertext = atbashCipher(plaintext);
         hint = 'Hint: This is an Atbash cipher (A=Z, B=Y, C=X, etc.)';
         currentCipherInfo = 'Atbash cipher';
+    } else if (cipherType === 'affine') {
+        // Valid 'a' values that are coprime with 26
+        const validA = [1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25];
+        const a = validA[Math.floor(Math.random() * validA.length)];
+        const b = Math.floor(Math.random() * 26);
+        ciphertext = affineEncrypt(plaintext, a, b);
+        hint = 'Hint: This is an Affine cipher. E(x) = (ax + b) mod 26';
+        currentCipherInfo = `Affine cipher with a=${a}, b=${b}`;
     }
 
     // Store the answer and display the problem

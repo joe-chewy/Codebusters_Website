@@ -9,8 +9,8 @@
 <body>
     <!-- Header section -->
     <header>
-        <h1>Codebusters Practice</h1>
-        <p>Science Olympiad Division B</p>
+        <h1>Dartmouth Middle School Codebusters Practice</h1>
+        <p>Division B</p>
         <nav>
             <a href="index.html" class="nav-link active">Tools</a>
             <a href="practice.html" class="nav-link">Practice</a>
@@ -79,7 +79,8 @@
         <section class="cipher-section">                                              
           <h2>Affine Cipher</h2>                                                    
           <p class="description">                                                   
-              <!-- Explain what it does -->                                         
+              Affine Cipher is encrypted with a modualar arithmetic formula E(x) = (ax + b) mod 26. 
+              The 'a' value must be coprime with 26.                                  
           </p>                                                                      
                                                                                 
           <!-- Input for text -->                                                   
@@ -90,8 +91,7 @@
                                                                                 
           <!-- Input for 'a' value -->                                              
           <div class="input-group">                                                 
-              <label for="affine-a">A value (must be                                
-      1,3,5,7,9,11,15,17,19,21,23,25):</label>                                      
+              <label for="affine-a">A value (must be 1,3,5,7,9,11,15,17,19,21,23,25):</label>                                      
               <input type="number" id="affine-a" value="5">                         
           </div>                                                                    
                                                                                 
@@ -101,8 +101,16 @@
               <input type="number" id="affine-b" value="8">                         
           </div>                                                                    
                                                                                 
-          <!-- Buttons -->                                                          
-          <!-- Output box -->                                                       
+          <!-- Buttons -->    
+          <div class="button-group">
+              <button id="affine-encrypt">Encrypt</button>
+              <button id="affine-decrypt">Decrypt</button>
+          </div>                                                      
+          <!-- Output box -->  
+          <div class="output-group">
+              <label>Result:</label>
+              <div id="affine-output" class="output-box">Your result will appear here</div>
+          </div>                                                     
         </section>          
 
         

@@ -128,6 +128,91 @@ atbashConvertBtn.addEventListener('click', function() {
 });
 
 
+// ===== AFFINE CIPHER =====
+
+const affineInput = document.getElementById('affine-input');
+const affineA = document.getElementById('affine-a');
+const affineB = document.getElementById('affine-b');
+const affineOutput = document.getElementById('affine-output');
+const affineEncryptBtn = document.getElementById('affine-encrypt');
+const affineDecryptBtn = document.getElementById('affine-decrypt');
+
+function modInverse(a) {
+    // Only these values of 'a' are valid (coprime with 26)
+    const inverses = {
+        1:1, 3: 9, 5: 21, 7: 15,
+        9:3, 11: 19, 15: 7, 17: 23,
+        19: 11, 21: 5, 23: 17, 25: 25
+    };
+    return inverses[a];
+}
+
+function affineEncrypt(text, a, b) {
+    let result = '';
+
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+
+        if (char >= 'A' && char <= 'Z') {
+            let code = char.charCodeAt(0) - 65;
+            let index = (a * code + b) % 26;
+            result += String.fromCharCode(index + 65);
+        }
+        else if (char >= 'a' && char <= 'z') {
+            let code = char.charCodeAt(0) - 97;
+            let index = (a * code + b) % 26;  // Same as 219 - code
+            result += String.fromCharCode(index + 97);
+        }
+        else {
+            result += char;
+        }
+    }
+    return result
+}
+
+function affineDecrypt(text, a, b) {
+    let result = '';
+
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+
+        if (char >= 'A' && char <= 'Z') {
+            let code = char.charCodeAt(0) - 65;
+            let index = modInverse(a) * (code - b + 26) % 26;
+            result += String.fromCharCode(index + 65);
+        }
+        else if (char >= 'a' && char <= 'z') {
+            let code = char.charCodeAt(0) - 97;
+            let index = modInverse(a) * (code - b + 26) % 26;  
+            result += String.fromCharCode(index + 97);
+        }
+        else {
+            result += char;
+        }
+    }
+    return result
+}
+
+// Add click event listener to the Encrypt button
+affineEncryptBtn.addEventListener('click', function() {
+    const text = affineInput.value;
+    const a = parseInt(affineA.value);
+    const b = parseInt(affineB.value);
+
+    const encrypted = affineEncrypt(text, a, b);
+    affineOutput.textContent = encrypted;
+});
+
+// Add click event listener to the Decrypt button
+affineDecryptBtn.addEventListener('click', function() {
+    const text = affineInput.value;
+    const a = parseInt(affineA.value);
+    const b = parseInt(affineB.value);
+
+    const decrypted = affineDecrypt(text, a, b)
+    affineOutput.textContent = decrypted;
+});
+
 // ===== HELPFUL TIP =====
 // To add more ciphers:
 // 1. Add a new <section> in index.html with input/output elements
