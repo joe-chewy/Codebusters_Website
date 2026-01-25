@@ -127,6 +127,130 @@ function affineEncrypt(text, a, b) {
     return result;
 }
 
+// ===== CHECKERBOARD (POLYBIUS) CIPHER =====
+
+function createPolybiusAlphabet(keyword = '') {
+    keyword = keyword.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+    let alphabet = '';
+    let used = new Set();
+
+    for (let char of keyword) {
+        if (!used.has(char)) {
+            alphabet += char;
+            used.add(char);
+        }
+    }
+
+    for (let i = 0; i < 26; i++) {
+        let char = String.fromCharCode(65 + i);
+        if (char !== 'J' && !used.has(char)) {
+            alphabet += char;
+            used.add(char);
+        }
+    }
+
+    return alphabet;
+}
+
+function checkerboardEncrypt(text, keyword = '') {
+    const alphabet = createPolybiusAlphabet(keyword);
+    text = text.toUpperCase().replace(/J/g, 'I');
+    let result = '';
+
+    for (let char of text) {
+        if (char >= 'A' && char <= 'Z') {
+            let index = alphabet.indexOf(char);
+            if (index !== -1) {
+                let row = Math.floor(index / 5) + 1;
+                let col = (index % 5) + 1;
+                result += '' + row + col + ' ';
+            }
+        }
+    }
+
+    return result.trim();
+}
+
+// ===== NIHILIST SUBSTITUTION CIPHER =====
+
+function letterToPolybius(char, alphabet) {
+    char = char.toUpperCase();
+    if (char === 'J') char = 'I';
+    let index = alphabet.indexOf(char);
+    if (index === -1) return null;
+    let row = Math.floor(index / 5) + 1;
+    let col = (index % 5) + 1;
+    return row * 10 + col;
+}
+
+function nihilistEncrypt(text, alphabetKey, cipherKey) {
+    const alphabet = createPolybiusAlphabet(alphabetKey);
+    text = text.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+    cipherKey = cipherKey.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+
+    let keyNumbers = [];
+    for (let char of cipherKey) {
+        keyNumbers.push(letterToPolybius(char, alphabet));
+    }
+
+    let result = [];
+    for (let i = 0; i < text.length; i++) {
+        let plainNum = letterToPolybius(text[i], alphabet);
+        let keyNum = keyNumbers[i % keyNumbers.length];
+        result.push(plainNum + keyNum);
+    }
+
+    return result.join(' ');
+}
+
+// ===== COMPLETE COLUMNAR TRANSPOSITION CIPHER =====
+
+function getColumnOrder(keyword) {
+    keyword = keyword.toUpperCase();
+    let pairs = [];
+    for (let i = 0; i < keyword.length; i++) {
+        pairs.push([keyword[i], i]);
+    }
+    pairs.sort((a, b) => {
+        if (a[0] < b[0]) return -1;
+        if (a[0] > b[0]) return 1;
+        return a[1] - b[1];
+    });
+    return pairs.map(p => p[1]);
+}
+
+function columnarEncrypt(text, keyword) {
+    keyword = keyword.toUpperCase().replace(/[^A-Z]/g, '');
+    text = text.toUpperCase().replace(/[^A-Z]/g, '');
+
+    let numCols = keyword.length;
+    let numRows = Math.ceil(text.length / numCols);
+
+    while (text.length < numRows * numCols) {
+        text += 'X';
+    }
+
+    let grid = [];
+    for (let r = 0; r < numRows; r++) {
+        let row = [];
+        for (let c = 0; c < numCols; c++) {
+            row.push(text[r * numCols + c]);
+        }
+        grid.push(row);
+    }
+
+    let order = getColumnOrder(keyword);
+
+    let result = '';
+    for (let colIndex of order) {
+        for (let r = 0; r < numRows; r++) {
+            result += grid[r][colIndex];
+        }
+    }
+
+    return result;
+}
+
 
 // ===== PRACTICE PROBLEMS =====
 
@@ -190,6 +314,34 @@ function generateProblem() {
         ciphertext = affineEncrypt(plaintext, a, b);
         hint = 'Hint: This is an Affine cipher. E(x) = (ax + b) mod 26';
         currentCipherInfo = `Affine cipher with a=${a}, b=${b}`;
+    } else if (cipherType === 'checkerboard') {
+        // Random keywords for Polybius grid
+        const keywords = ['', 'ZEBRA', 'KEYWORD', 'SECRET', 'CIPHER', 'PUZZLE', 'QUANTUM'];
+        const keyword = keywords[Math.floor(Math.random() * keywords.length)];
+        ciphertext = checkerboardEncrypt(plaintext, keyword);
+        if (keyword === '') {
+            hint = 'Hint: This is a Polybius square cipher with standard alphabet (A=11, B=12, ...)';
+            currentCipherInfo = 'Checkerboard cipher with standard alphabet';
+        } else {
+            hint = `Hint: This is a Polybius square cipher with keyword "${keyword}"`;
+            currentCipherInfo = `Checkerboard cipher with keyword "${keyword}"`;
+        }
+    } else if (cipherType === 'nihilist') {
+        // Random keywords
+        const alphabetKeys = ['', 'ZEBRA', 'KEYWORD', 'SECRET'];
+        const cipherKeys = ['KEY', 'CODE', 'MATH', 'SCIENCE', 'OLYMPIAD'];
+        const alphabetKey = alphabetKeys[Math.floor(Math.random() * alphabetKeys.length)];
+        const cipherKey = cipherKeys[Math.floor(Math.random() * cipherKeys.length)];
+        ciphertext = nihilistEncrypt(plaintext, alphabetKey, cipherKey);
+        hint = `Hint: This is a Nihilist cipher. Alphabet key: "${alphabetKey || 'standard'}", Cipher key: "${cipherKey}"`;
+        currentCipherInfo = `Nihilist cipher with alphabet key="${alphabetKey || 'standard'}", cipher key="${cipherKey}"`;
+    } else if (cipherType === 'columnar') {
+        // Random keywords for columnar transposition
+        const keywords = ['KEY', 'CODE', 'MATH', 'ZEBRA', 'SECRET', 'CIPHER'];
+        const keyword = keywords[Math.floor(Math.random() * keywords.length)];
+        ciphertext = columnarEncrypt(plaintext, keyword);
+        hint = `Hint: This is a Complete Columnar Transposition cipher with keyword "${keyword}"`;
+        currentCipherInfo = `Complete Columnar cipher with keyword "${keyword}"`;
     }
 
     // Store the answer and display the problem

@@ -213,6 +213,452 @@ affineDecryptBtn.addEventListener('click', function() {
     affineOutput.textContent = decrypted;
 });
 
+// ===== CHECKERBOARD CIPHER (POLYBIUS SQUARE) =====
+
+const checkerboardInput = document.getElementById('checkerboard-input');
+const checkerboardKeyword = document.getElementById('checkerboard-keyword');
+const checkerboardOutput = document.getElementById('checkerboard-output');
+const checkerboardGrid = document.getElementById('checkerboard-grid');
+const checkerboardEncryptBtn = document.getElementById('checkerboard-encrypt');
+const checkerboardDecryptBtn = document.getElementById('checkerboard-decrypt');
+
+/**
+ * Creates a Polybius square alphabet from an optional keyword
+ * @param {string} keyword - Optional keyword to scramble the alphabet
+ * @returns {string} - 25 letter alphabet (I/J combined)
+ */
+function createPolybiusAlphabet(keyword = '') {
+    // Remove non-letters and convert to uppercase
+    keyword = keyword.toUpperCase().replace(/[^A-Z]/g, '');
+    // Replace J with I
+    keyword = keyword.replace(/J/g, 'I');
+
+    // Build alphabet starting with keyword (no duplicates)
+    let alphabet = '';
+    let used = new Set();
+
+    // Add keyword letters first
+    for (let char of keyword) {
+        if (!used.has(char)) {
+            alphabet += char;
+            used.add(char);
+        }
+    }
+
+    // Add remaining letters (excluding J)
+    for (let i = 0; i < 26; i++) {
+        let char = String.fromCharCode(65 + i);
+        if (char !== 'J' && !used.has(char)) {
+            alphabet += char;
+            used.add(char);
+        }
+    }
+
+    return alphabet;
+}
+
+/**
+ * Displays the Polybius square grid
+ */
+function displayPolybiusGrid(alphabet, elementId) {
+    const gridElement = document.getElementById(elementId);
+    let html = '<table class="polybius-table"><tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>';
+
+    for (let row = 0; row < 5; row++) {
+        html += `<tr><th>${row + 1}</th>`;
+        for (let col = 0; col < 5; col++) {
+            let char = alphabet[row * 5 + col];
+            // Show I/J together
+            if (char === 'I') char = 'I/J';
+            html += `<td>${char}</td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</table>';
+    gridElement.innerHTML = html;
+}
+
+/**
+ * Encrypts text using Polybius square (letters to numbers)
+ */
+function checkerboardEncrypt(text, keyword = '') {
+    const alphabet = createPolybiusAlphabet(keyword);
+    text = text.toUpperCase().replace(/J/g, 'I');
+    let result = '';
+
+    for (let char of text) {
+        if (char >= 'A' && char <= 'Z') {
+            let index = alphabet.indexOf(char);
+            if (index !== -1) {
+                let row = Math.floor(index / 5) + 1;
+                let col = (index % 5) + 1;
+                result += '' + row + col + ' ';
+            }
+        } else if (char === ' ') {
+            result += '  '; // Double space for word separation
+        }
+    }
+
+    return result.trim();
+}
+
+/**
+ * Decrypts Polybius numbers back to letters
+ */
+function checkerboardDecrypt(text, keyword = '') {
+    const alphabet = createPolybiusAlphabet(keyword);
+    // Extract all two-digit numbers
+    let numbers = text.match(/\d{2}/g) || [];
+    let result = '';
+
+    for (let num of numbers) {
+        let row = parseInt(num[0]) - 1;
+        let col = parseInt(num[1]) - 1;
+
+        if (row >= 0 && row < 5 && col >= 0 && col < 5) {
+            result += alphabet[row * 5 + col];
+        }
+    }
+
+    return result;
+}
+
+checkerboardEncryptBtn.addEventListener('click', function() {
+    const text = checkerboardInput.value;
+    const keyword = checkerboardKeyword.value;
+    const alphabet = createPolybiusAlphabet(keyword);
+
+    displayPolybiusGrid(alphabet, 'checkerboard-grid');
+    const encrypted = checkerboardEncrypt(text, keyword);
+    checkerboardOutput.textContent = encrypted;
+});
+
+checkerboardDecryptBtn.addEventListener('click', function() {
+    const text = checkerboardInput.value;
+    const keyword = checkerboardKeyword.value;
+    const alphabet = createPolybiusAlphabet(keyword);
+
+    displayPolybiusGrid(alphabet, 'checkerboard-grid');
+    const decrypted = checkerboardDecrypt(text, keyword);
+    checkerboardOutput.textContent = decrypted;
+});
+
+
+// ===== NIHILIST SUBSTITUTION CIPHER =====
+
+const nihilistInput = document.getElementById('nihilist-input');
+const nihilistAlphabetKey = document.getElementById('nihilist-alphabet-key');
+const nihilistCipherKey = document.getElementById('nihilist-cipher-key');
+const nihilistOutput = document.getElementById('nihilist-output');
+const nihilistGrid = document.getElementById('nihilist-grid');
+const nihilistEncryptBtn = document.getElementById('nihilist-encrypt');
+const nihilistDecryptBtn = document.getElementById('nihilist-decrypt');
+
+/**
+ * Converts a letter to its Polybius number using given alphabet
+ */
+function letterToPolybius(char, alphabet) {
+    char = char.toUpperCase();
+    if (char === 'J') char = 'I';
+
+    let index = alphabet.indexOf(char);
+    if (index === -1) return null;
+
+    let row = Math.floor(index / 5) + 1;
+    let col = (index % 5) + 1;
+    return row * 10 + col;
+}
+
+/**
+ * Converts a Polybius number to its letter using given alphabet
+ */
+function polybiusToLetter(num, alphabet) {
+    let row = Math.floor(num / 10) - 1;
+    let col = (num % 10) - 1;
+
+    if (row >= 0 && row < 5 && col >= 0 && col < 5) {
+        return alphabet[row * 5 + col];
+    }
+    return '';
+}
+
+/**
+ * Encrypts using Nihilist cipher
+ */
+function nihilistEncrypt(text, alphabetKey, cipherKey) {
+    const alphabet = createPolybiusAlphabet(alphabetKey);
+
+    // Clean inputs
+    text = text.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+    cipherKey = cipherKey.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+
+    if (cipherKey.length === 0) {
+        return 'Please enter a cipher keyword';
+    }
+
+    // Convert cipher key to Polybius numbers
+    let keyNumbers = [];
+    for (let char of cipherKey) {
+        keyNumbers.push(letterToPolybius(char, alphabet));
+    }
+
+    // Encrypt each character
+    let result = [];
+    for (let i = 0; i < text.length; i++) {
+        let plainNum = letterToPolybius(text[i], alphabet);
+        let keyNum = keyNumbers[i % keyNumbers.length];
+        result.push(plainNum + keyNum);
+    }
+
+    return result.join(' ');
+}
+
+/**
+ * Decrypts Nihilist cipher
+ */
+function nihilistDecrypt(text, alphabetKey, cipherKey) {
+    const alphabet = createPolybiusAlphabet(alphabetKey);
+
+    // Clean cipher key
+    cipherKey = cipherKey.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+
+    if (cipherKey.length === 0) {
+        return 'Please enter a cipher keyword';
+    }
+
+    // Convert cipher key to Polybius numbers
+    let keyNumbers = [];
+    for (let char of cipherKey) {
+        keyNumbers.push(letterToPolybius(char, alphabet));
+    }
+
+    // Extract numbers from ciphertext
+    let numbers = text.match(/\d+/g) || [];
+
+    // Decrypt each number
+    let result = '';
+    for (let i = 0; i < numbers.length; i++) {
+        let cipherNum = parseInt(numbers[i]);
+        let keyNum = keyNumbers[i % keyNumbers.length];
+        let plainNum = cipherNum - keyNum;
+        result += polybiusToLetter(plainNum, alphabet);
+    }
+
+    return result;
+}
+
+nihilistEncryptBtn.addEventListener('click', function() {
+    const text = nihilistInput.value;
+    const alphabetKey = nihilistAlphabetKey.value;
+    const cipherKey = nihilistCipherKey.value;
+    const alphabet = createPolybiusAlphabet(alphabetKey);
+
+    displayPolybiusGrid(alphabet, 'nihilist-grid');
+    const encrypted = nihilistEncrypt(text, alphabetKey, cipherKey);
+    nihilistOutput.textContent = encrypted;
+});
+
+nihilistDecryptBtn.addEventListener('click', function() {
+    const text = nihilistInput.value;
+    const alphabetKey = nihilistAlphabetKey.value;
+    const cipherKey = nihilistCipherKey.value;
+    const alphabet = createPolybiusAlphabet(alphabetKey);
+
+    displayPolybiusGrid(alphabet, 'nihilist-grid');
+    const decrypted = nihilistDecrypt(text, alphabetKey, cipherKey);
+    nihilistOutput.textContent = decrypted;
+});
+
+
+// ===== COMPLETE COLUMNAR TRANSPOSITION CIPHER =====
+
+const columnarInput = document.getElementById('columnar-input');
+const columnarKeyword = document.getElementById('columnar-keyword');
+const columnarOutput = document.getElementById('columnar-output');
+const columnarGrid = document.getElementById('columnar-grid');
+const columnarEncryptBtn = document.getElementById('columnar-encrypt');
+const columnarDecryptBtn = document.getElementById('columnar-decrypt');
+
+/**
+ * Gets the column order based on keyword alphabetical sorting
+ * @param {string} keyword - The keyword
+ * @returns {number[]} - Array of column indices in read order
+ */
+function getColumnOrder(keyword) {
+    keyword = keyword.toUpperCase();
+
+    // Create array of [letter, original index] pairs
+    let pairs = [];
+    for (let i = 0; i < keyword.length; i++) {
+        pairs.push([keyword[i], i]);
+    }
+
+    // Sort alphabetically (stable sort for duplicate letters)
+    pairs.sort((a, b) => {
+        if (a[0] < b[0]) return -1;
+        if (a[0] > b[0]) return 1;
+        return a[1] - b[1]; // For same letters, maintain original order
+    });
+
+    // Return the original indices in sorted order
+    return pairs.map(p => p[1]);
+}
+
+/**
+ * Displays the columnar grid
+ */
+function displayColumnarGrid(keyword, grid, order) {
+    const gridElement = document.getElementById('columnar-grid');
+    keyword = keyword.toUpperCase();
+
+    // Create numbered order for display
+    let orderNumbers = new Array(keyword.length);
+    for (let i = 0; i < order.length; i++) {
+        orderNumbers[order[i]] = i + 1;
+    }
+
+    let html = '<table class="columnar-table">';
+
+    // Header row with keyword letters
+    html += '<tr>';
+    for (let i = 0; i < keyword.length; i++) {
+        html += `<th>${keyword[i]}<br><small>(${orderNumbers[i]})</small></th>`;
+    }
+    html += '</tr>';
+
+    // Data rows
+    for (let row of grid) {
+        html += '<tr>';
+        for (let cell of row) {
+            html += `<td>${cell}</td>`;
+        }
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    gridElement.innerHTML = html;
+}
+
+/**
+ * Encrypts using Complete Columnar Transposition
+ */
+function columnarEncrypt(text, keyword) {
+    keyword = keyword.toUpperCase().replace(/[^A-Z]/g, '');
+    if (keyword.length === 0) {
+        return 'Please enter a keyword';
+    }
+
+    // Clean text - remove non-letters and convert to uppercase
+    text = text.toUpperCase().replace(/[^A-Z]/g, '');
+
+    if (text.length === 0) {
+        return 'Please enter some text';
+    }
+
+    let numCols = keyword.length;
+    let numRows = Math.ceil(text.length / numCols);
+
+    // Pad with X to fill the grid
+    while (text.length < numRows * numCols) {
+        text += 'X';
+    }
+
+    // Fill grid row by row
+    let grid = [];
+    for (let r = 0; r < numRows; r++) {
+        let row = [];
+        for (let c = 0; c < numCols; c++) {
+            row.push(text[r * numCols + c]);
+        }
+        grid.push(row);
+    }
+
+    // Get column read order
+    let order = getColumnOrder(keyword);
+
+    // Display the grid
+    displayColumnarGrid(keyword, grid, order);
+
+    // Read columns in order
+    let result = '';
+    for (let colIndex of order) {
+        for (let r = 0; r < numRows; r++) {
+            result += grid[r][colIndex];
+        }
+        result += ' '; // Space between column groups
+    }
+
+    return result.trim();
+}
+
+/**
+ * Decrypts Complete Columnar Transposition
+ */
+function columnarDecrypt(text, keyword) {
+    keyword = keyword.toUpperCase().replace(/[^A-Z]/g, '');
+    if (keyword.length === 0) {
+        return 'Please enter a keyword';
+    }
+
+    // Clean text
+    text = text.toUpperCase().replace(/[^A-Z]/g, '');
+
+    if (text.length === 0) {
+        return 'Please enter some text';
+    }
+
+    let numCols = keyword.length;
+    let numRows = Math.ceil(text.length / numCols);
+
+    // Get column read order
+    let order = getColumnOrder(keyword);
+
+    // Create empty grid
+    let grid = [];
+    for (let r = 0; r < numRows; r++) {
+        grid.push(new Array(numCols).fill(''));
+    }
+
+    // Fill columns in order
+    let textIndex = 0;
+    for (let colIndex of order) {
+        for (let r = 0; r < numRows; r++) {
+            if (textIndex < text.length) {
+                grid[r][colIndex] = text[textIndex];
+                textIndex++;
+            }
+        }
+    }
+
+    // Display the grid
+    displayColumnarGrid(keyword, grid, order);
+
+    // Read row by row
+    let result = '';
+    for (let r = 0; r < numRows; r++) {
+        for (let c = 0; c < numCols; c++) {
+            result += grid[r][c];
+        }
+    }
+
+    return result;
+}
+
+columnarEncryptBtn.addEventListener('click', function() {
+    const text = columnarInput.value;
+    const keyword = columnarKeyword.value;
+    const encrypted = columnarEncrypt(text, keyword);
+    columnarOutput.textContent = encrypted;
+});
+
+columnarDecryptBtn.addEventListener('click', function() {
+    const text = columnarInput.value;
+    const keyword = columnarKeyword.value;
+    const decrypted = columnarDecrypt(text, keyword);
+    columnarOutput.textContent = decrypted;
+});
+
+
 // ===== HELPFUL TIP =====
 // To add more ciphers:
 // 1. Add a new <section> in index.html with input/output elements

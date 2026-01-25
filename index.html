@@ -111,10 +111,115 @@
               <label>Result:</label>
               <div id="affine-output" class="output-box">Your result will appear here</div>
           </div>                                                     
-        </section>          
+        </section>
 
-        
-        
+        <!-- Checkerboard Cipher (Polybius Square) -->
+        <section class="cipher-section">
+            <h2>Checkerboard Cipher (Polybius Square)</h2>
+            <p class="description">
+                Uses a 5x5 grid to convert letters to two-digit numbers. Each letter is replaced by its
+                row and column number. I and J share the same position. A keyword can scramble the grid.
+            </p>
+
+            <div class="input-group">
+                <label for="checkerboard-input">Enter text:</label>
+                <textarea id="checkerboard-input" placeholder="TYPE YOUR MESSAGE HERE"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="checkerboard-keyword">Keyword (optional, letters only):</label>
+                <input type="text" id="checkerboard-keyword" placeholder="e.g., KEYWORD">
+            </div>
+
+            <div class="button-group">
+                <button id="checkerboard-encrypt">Encrypt (Letters → Numbers)</button>
+                <button id="checkerboard-decrypt">Decrypt (Numbers → Letters)</button>
+            </div>
+
+            <div class="output-group">
+                <label>Result:</label>
+                <div id="checkerboard-output" class="output-box">Your result will appear here</div>
+            </div>
+
+            <div class="output-group">
+                <label>Polybius Square Used:</label>
+                <div id="checkerboard-grid" class="grid-display"></div>
+            </div>
+        </section>
+
+        <!-- Nihilist Substitution Cipher -->
+        <section class="cipher-section">
+            <h2>Nihilist Substitution Cipher</h2>
+            <p class="description">
+                Combines a Polybius square with a numeric key. First, convert letters to Polybius numbers,
+                then add key numbers (from a keyword) to each position. Result is two-digit numbers.
+            </p>
+
+            <div class="input-group">
+                <label for="nihilist-input">Enter text:</label>
+                <textarea id="nihilist-input" placeholder="TYPE YOUR MESSAGE HERE"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="nihilist-alphabet-key">Alphabet Keyword (for Polybius grid):</label>
+                <input type="text" id="nihilist-alphabet-key" placeholder="e.g., ZEBRA">
+            </div>
+
+            <div class="input-group">
+                <label for="nihilist-cipher-key">Cipher Keyword (repeating key):</label>
+                <input type="text" id="nihilist-cipher-key" placeholder="e.g., SECRET">
+            </div>
+
+            <div class="button-group">
+                <button id="nihilist-encrypt">Encrypt</button>
+                <button id="nihilist-decrypt">Decrypt</button>
+            </div>
+
+            <div class="output-group">
+                <label>Result:</label>
+                <div id="nihilist-output" class="output-box">Your result will appear here</div>
+            </div>
+
+            <div class="output-group">
+                <label>Polybius Square Used:</label>
+                <div id="nihilist-grid" class="grid-display"></div>
+            </div>
+        </section>
+
+        <!-- Complete Columnar Transposition Cipher -->
+        <section class="cipher-section">
+            <h2>Complete Columnar Transposition</h2>
+            <p class="description">
+                A transposition cipher where text is written in rows under a keyword, then columns are
+                read off in alphabetical order of the keyword letters. Padding (X) is added if needed.
+            </p>
+
+            <div class="input-group">
+                <label for="columnar-input">Enter text:</label>
+                <textarea id="columnar-input" placeholder="TYPE YOUR MESSAGE HERE"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="columnar-keyword">Keyword:</label>
+                <input type="text" id="columnar-keyword" placeholder="e.g., KEYWORD">
+            </div>
+
+            <div class="button-group">
+                <button id="columnar-encrypt">Encrypt</button>
+                <button id="columnar-decrypt">Decrypt</button>
+            </div>
+
+            <div class="output-group">
+                <label>Result:</label>
+                <div id="columnar-output" class="output-box">Your result will appear here</div>
+            </div>
+
+            <div class="output-group">
+                <label>Grid Visualization:</label>
+                <div id="columnar-grid" class="grid-display"></div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->

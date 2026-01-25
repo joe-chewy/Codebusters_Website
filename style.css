@@ -253,6 +253,57 @@ footer {
     margin-top: 20px;
 }
 
+/* ===== GRID DISPLAYS (Polybius, Columnar) ===== */
+.grid-display {
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+.polybius-table, .columnar-table {
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    margin: 0 auto;
+}
+
+.polybius-table th, .polybius-table td,
+.columnar-table th, .columnar-table td {
+    border: 1px solid #bdc3c7;
+    padding: 8px 12px;
+    text-align: center;
+    min-width: 35px;
+}
+
+.polybius-table th, .columnar-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+.polybius-table td, .columnar-table td {
+    background-color: #ecf0f1;
+}
+
+.columnar-table th small {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+/* Text input for keywords */
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 /* Adjustments for smaller screens (phones) */
 @media (max-width: 600px) {
